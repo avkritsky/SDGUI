@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table align="center" border="1" cellpadding="1" cellspacing="1" style="table-layout: fixed; width: 100%">
+<caption><strong>Просмотр информации о контейнере {{ data.Name }}:</strong></caption>
+    <tbody>
+        <td>
+            {{data}}
+        </td>
+    </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table align="center" border="1" cellpadding="5" cellspacing="2" style="width:100%">
+<caption><strong>Информация о контейнерах:</strong></caption>
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Имя</th>
+            <th scope="col">Статус</th>
+            <th scope="col">Порт</th>
+            <th scope="col">Образ</th>
+            <th scope="col">Действия</th>
+            <th scope="col">Управление</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in data %}
+        <tr>
+            <td style="text-align:center"><a href="containers/inspect/{{ item.Id }}">{{ item.Id }}</a></td>
+            <td style="text-align:center">{{ item.Names[0] }}</td>
+            {% if "Up" in item.Status and "Paused" not in item.Status %}
+                <td style="text-align:center; background-color: #84FF80;">
+                    <table style="border-collapse: collapse; width: 100%;" border="1" cellpadding="3">
+                    <tbody>
+                    <tr>
+                    <td style="width: 100%; background-color: #84FF80;">{{ item.Status }}</td>
+                    </tr>
+                    <tr>
+                    <td style="width: 100%; background-color: #99CC99;"><a href="containers/logs/{{ item.Id }}">Логи</a></td>
+                    </tr>
+                    </tbody>
+                    </table>
+                </td>
+                <td style="text-align:center">{{ item.Ports[0].PrivatePort }}:{{ item.Ports[0].PublicPort }}</td>
+            {% else %}
+                <td style="text-align:center; background-color: #FF9980;">
+                    <table style="border-collapse: collapse; width: 100%;" border="1" cellpadding="3">
+                    <tbody>
+                    <tr>
+                    <td style="width: 100%; background-color: #FF9980;">{{ item.Status }}</td>
+                    </tr>
+                    </tbody>
+                    </table>
+                </td>
+                <td style="text-align:center">None</td>
+            {% endif %}
+            <td style="text-align:center">{{ item.Image }}</td>
+            <td style="text-align:center">
+                <table style="border-collapse: collapse; width: 100%;" border="1" cellpadding="3">
+                    <tbody>
+                    {% if "Paused" in item.Status %}
+                        <tr>
+                        <td style="width: 100%; background-color: #84FF80;"><a href="containers/unpause/{{ item.Id }}">Возобновить (Unpause)</a></td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                        <td style="width: 100%; background-color: #FFF380;"><a href="containers/pause/{{ item.Id }}">Приостановить (Pause)</a></td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                    <td style="width: 100%; background-color: #FFF380;"><a href="containers/restart/{{ item.Id }}">Перезапустить</a></td>
+                    </tr>
+                    {% if "Up" in item.Status %}
+                        <tr>
+                        <td style="width: 100%; background-color: #FF9980;"><a href="containers/stop/{{ item.Id }}">Остановить</a></td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                        <td style="width: 100%; background-color: #84FF80;"><a href="containers/start/{{ item.Id }}">Запустить</a></td>
+                        </tr>
+                        </tbody>
+                    {% endif %}
+                </table>
+            </td>
+            <td style="text-align:center">
+                <table style="border-collapse: collapse; width: 100%;" border="1" cellpadding="3">
+                    <tbody>
+                    <tr>
+                    <td style="width: 100%; background-color: #84FF80;"><a href="containers/start/{{ item.Id }}">Запустить</a></td>
+                    </tr>
+                    <tr>
+                    <td style="width: 100%; background-color: #FFF380;"><a href="containers/restart/{{ item.Id }}">Перезапустить</a></td>
+                    </tr>
+                    <tr>
+                    <td style="width: 100%; background-color: #FF9980;"><a href="containers/stop/{{ item.Id }}">Остановить</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}

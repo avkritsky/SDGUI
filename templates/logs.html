@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table align="center" border="1" cellpadding="1" cellspacing="1" style="table-layout: fixed; width: 100%">
+<caption><strong>Просмотр логов контейнера {{ name }}:</strong></caption>
+    <thead>
+        <tr>
+            {% for i in range(col) %}
+            <th scope="col">
+                <a href="{{ name }}?selected_range={{i+1}}">
+                    {{i + 1}}
+                </a>
+            </th>
+            {%endfor%}
+        </tr>
+    </thead>
+    </table>
+
+    <center>
+        {% for log in logs %}
+            {{log}}
+            <br>
+        {%endfor%}
+    </center>
+{% endblock %}

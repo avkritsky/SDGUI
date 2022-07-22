@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table align="center" border="1" cellpadding="5" cellspacing="2" style="width:100%">
+<caption><strong>Информация об образах:</strong></caption>
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Имя (tag)</th>
+            <th scope="col">Размер</th>
+            <th scope="col">Создан</th>
+            <th scope="col">Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in data %}
+        <tr>
+            <td style="text-align:center">{{ item.Id }}</td>
+            <td style="text-align:center">{{ item.RepoTags[0] }}</td>
+            <td style="text-align:center">{{ '%0.2f'| format(item.Size / 1024 / 1024|float) }} Мб.</td>
+            <td style="text-align:center">{{ item.Created }}</td>
+            <td style="text-align:center">
+                <table style="border-collapse: collapse; width: 100%;" border="1">
+                    <tbody>
+                    <tr>
+                    <td style="width: 100%; background-color: #84FF80;"><a href="start/{{ item.Id }}">Э</a></td>
+                    </tr>
+                    <tr>
+                    <td style="width: 100%; background-color: #FFF380;"><a href="restart/{{ item.Id }}">А</a></td>
+                    </tr>
+                    <tr>
+                    <td style="width: 100%; background-color: #FF9980;"><a href="/images/delete/{{ item.Id }}">Удалить</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}
