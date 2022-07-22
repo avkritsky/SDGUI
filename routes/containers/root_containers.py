@@ -14,50 +14,15 @@ templates = Jinja2Templates(directory='templates')
 
 
 @router.get('/inspect/{container_id}')
-async def restart_container(request: Request, container_id: str):
+async def inspect_container(request: Request, container_id: str):
     url = f'http://localhost:2300/containers/{container_id}/json'
     data: dict = await make_get_async_request(url)
     if data:
-        response = {'request': request, 'data': data}
+        # response = {'request': request, 'data': data}
         # return templates.TemplateResponse('inspect.html', response)
         return data
     else:
         return RedirectResponse('/')
-
-
-def rework_data_for_html(raw_data: dict):
-    ...
-    return raw_data
-
-
-def rework_list(raw_list: list) -> list:
-    res = []
-
-    for val in raw_list:
-        if isinstance(val, list):
-            res.append(f'{rework_list(val)} ')
-        elif isinstance(val, dict):
-            res.append(f'{rework_dict(val)} ')
-        else:
-            res.append(f'{val} ')
-    return res
-
-
-def rework_dict(raw_list: dict) -> list:
-    res = []
-
-    for key, val in raw_list.items():
-        if isinstance(val, list):
-            res.append(f'{key}:')
-            res.append(f'{rework_list(val)} ')
-        elif isinstance(val, dict):
-            res.append(f'{key}:')
-            res.append(f'{rework_dict(val)} ')
-        else:
-            res.append(f'{key}:')
-            res.append(f'{val} ')
-
-    return res
 
 
 @router.get('/restart/{container_id}')

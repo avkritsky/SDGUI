@@ -38,7 +38,11 @@
                     <table style="border-collapse: collapse; width: 100%;" border="1" cellpadding="3">
                     <tbody>
                     <tr>
-                    <td style="width: 100%; background-color: #FF9980;">{{ item.Status }}</td>
+                        {% if "Paused" in item.Status %}
+                            <td style="width: 100%; background-color: #FFF380;">{{ item.Status }}</td>
+                        {% else %}
+                            <td style="width: 100%; background-color: #FF9980;">{{ item.Status }}</td>
+                        {% endif %}
                     </tr>
                     </tbody>
                     </table>
