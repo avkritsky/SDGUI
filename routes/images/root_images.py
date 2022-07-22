@@ -20,7 +20,6 @@ async def images_root(request: Request = None):
     if data:
         for item in data:
             item['Created'] = datetime.fromtimestamp(item.get('Created', 0))
-            # item['Id'] = item.get('Id', '')[7:]
         response = {'request': request, 'data': data}
         return templates.TemplateResponse('images.html', response)
     else:

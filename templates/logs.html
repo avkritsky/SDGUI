@@ -4,15 +4,19 @@
 <table align="center" border="1" cellpadding="1" cellspacing="1" style="table-layout: fixed; width: 100%">
 <caption><strong>Просмотр логов контейнера {{ name }}:</strong></caption>
     <thead>
+            {% for page in col %}
         <tr>
-            {% for i in range(col) %}
+            {% for i in range(page, page + 10) %}
             <th scope="col">
+            {% if i < max_col %}
                 <a href="{{ name }}?selected_range={{i+1}}">
                     {{i + 1}}
                 </a>
+            {% endif %}
             </th>
             {%endfor%}
         </tr>
+            {%endfor%}
     </thead>
     </table>
 

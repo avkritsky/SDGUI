@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table align="center" border="0" cellpadding="1" cellspacing="1" style="table-layout: fixed; width: 100%">
+    <caption><strong>При выполнении произошла чудовищная ошибка:</strong></caption>
+    <thead>
+        <tr>
+            <th scope="col">
+                {{ error }}
+            </th>
+        </tr>
+    </thead>
+</table>
+{% endblock %}
