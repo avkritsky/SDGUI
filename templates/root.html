@@ -17,7 +17,7 @@
     <tbody>
         {% for item in data %}
         <tr>
-            <td style="text-align:center"><a href="containers/inspect/{{ item.Id }}">{{ item.Id }}</a></td>
+            <td style="text-align:center"><a href="containers/inspect/{{ item.Id }}">{{ item.Id[:8] }}</a></td>
             <td style="text-align:center">{{ item.Names[0] }}</td>
             {% if "Up" in item.Status and "Paused" not in item.Status %}
                 <td style="text-align:center; background-color: #84FF80;">

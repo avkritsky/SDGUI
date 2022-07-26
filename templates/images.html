@@ -15,7 +15,7 @@
     <tbody>
         {% for item in data %}
         <tr>
-            <td style="text-align:center">{{ item.Id }}</td>
+            <td style="text-align:center">{{ item.Id[8:16] }}</td>
             <td style="text-align:center">{{ item.RepoTags[0] }}</td>
             <td style="text-align:center">{{ '%0.2f'| format(item.Size / 1024 / 1024|float) }} Мб.</td>
             <td style="text-align:center">{{ item.Created }}</td>
