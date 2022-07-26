@@ -2,7 +2,9 @@ from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
-from common_funcs.api_request import make_get_async_request, make_post_async_request
+from common_funcs.api_request import (make_get_async_request,
+                                      make_post_async_request,
+                                      make_delete_async_request)
 from routes.containers.logs.root_func import get_logs_for_container
 
 router = APIRouter(
@@ -62,6 +64,14 @@ async def unpause_container(container_id: str):
     """Роут для продолжения работы контейнера"""
     url = f'http://localhost:2300/containers/{container_id}/unpause'
     await make_post_async_request(url, data={})
+    return RedirectResponse('/')
+
+
+@router.get('/delete/{container_id}')
+async def delete_container(container_id: str):
+    """Роут для удаления контейнера"""
+    url = f'http://localhost:2300/containers/{container_id}'
+    await make_delete_async_request(url, data={})
     return RedirectResponse('/')
 
 
