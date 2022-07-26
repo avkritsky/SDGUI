@@ -16,18 +16,20 @@ templates = Jinja2Templates(directory='templates')
 
 @router.get('/')
 async def images_root(request: Request = None):
-    data = await make_get_async_request('http://localhost:2300/images/json?all=True')
-    if data:
+    url = 'http://localhost:2300/images/json?all=True'
+    status_code, data = await make_get_async_request(url)
+    if status_code == 200:
         for item in data:
             item['Created'] = datetime.fromtimestamp(item.get('Created', 0))
         response = {'request': request, 'data': data}
         return templates.TemplateResponse('images.html', response)
-    else:
-        return {'error': True, 'response_code': data}
+    return templates.TemplateResponse('error_page.html', data)
 
 
 @router.get('/delete/{image_id}')
 async def restart_container(image_id: str):
     url = f'http://localhost:2300/images/{image_id}'
-    await make_delete_async_request(url, data={})
-    return RedirectResponse('/images')
+    status_code, data = await make_delete_async_request(url, data={})
+    if status_code == 200:
+        return RedirectResponse('/images')
+    return templates.TemplateResponse('error_page.html', data)

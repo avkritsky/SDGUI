@@ -18,11 +18,12 @@ app.include_router(root_containers.router)
 
 @app.get('/')
 async def main_root(request: Request):
-    data = await make_get_async_request('http://localhost:2300/containers/json?all=True')
-    if data:
+    url = 'http://localhost:2300/containers/json?all=True'
+    status_code, data = await make_get_async_request(url)
+    if status_code == 200:
         response = {'request': request, 'data': data}
         # 'Id', 'Names', 'Image', 'ImageID', 'Command', 'Created', 'Ports', 'Labels', 'State', 'Status', 'HostConfig', 'NetworkSettings', 'Mounts'
         return templates.TemplateResponse('root.html', response)
     else:
-        return {'error': True, 'response_code': data}
+        return templates.TemplateResponse('error_page.html', data)
 
