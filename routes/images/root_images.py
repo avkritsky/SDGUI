@@ -23,13 +23,15 @@ async def images_root(request: Request = None):
             item['Created'] = datetime.fromtimestamp(item.get('Created', 0))
         response = {'request': request, 'data': data}
         return templates.TemplateResponse('images.html', response)
-    return templates.TemplateResponse('error_page.html', data)
+    response = {'request': request, **data}
+    return templates.TemplateResponse('error_page.html', response)
 
 
 @router.get('/delete/{image_id}')
-async def restart_container(image_id: str):
+async def restart_container(request: Request, image_id: str):
     url = f'http://localhost:2300/images/{image_id}'
     status_code, data = await make_delete_async_request(url, data={})
     if status_code == 200:
         return RedirectResponse('/images')
-    return templates.TemplateResponse('error_page.html', data)
+    response = {'request': request, **data}
+    return templates.TemplateResponse('error_page.html', response)
