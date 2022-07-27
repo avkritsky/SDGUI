@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  name_service:
+    image: python-slim3.9
+    container_name: sdgui
+    restart: always
+    volumes:
+      - .:/var/www/html/sdgui
+    working_dir: /var/www/html/sdgui
+    command: uvicorn root:app --host 0.0.0.0 --port 8031
+    network_mode: host
