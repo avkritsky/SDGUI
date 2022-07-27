@@ -32,7 +32,11 @@
                     </tbody>
                     </table>
                 </td>
-                <td style="text-align:center">{{ item.Ports[0].PrivatePort }}:{{ item.Ports[0].PublicPort }}</td>
+                {% if item.Ports %}
+                    <td style="text-align:center">{{ item.Ports[0].PrivatePort }}:{{ item.Ports[0].PublicPort }}</td>
+                {% else %}
+                    <td style="text-align:center">---- : ----</td>
+                {% endif %}
             {% else %}
                 <td style="text-align:center; background-color: #FF9980;">
                     <table style="border-collapse: collapse; width: 100%;" border="1" cellpadding="3">

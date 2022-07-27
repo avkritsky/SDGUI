@@ -11,7 +11,12 @@ async def make_get_async_request(url: str):
 async def make_get_async_request_data(url: str):
     async with ClientSession() as sess:
         async with sess.get(url) as res:
-            data = await res.text()
+            data = await res.content.read()
+            print('test')
+            try:
+                data = data.decode(errors='ignore')
+            except UnicodeDecodeError:
+                data = data.decode(encoding='cp1251', errors='ignore')
             return res.status, data
 
 

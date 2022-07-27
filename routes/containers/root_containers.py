@@ -40,7 +40,7 @@ async def start_container(request: Request, container_id: str):
     """Роут для запуска контейнера"""
     url = f'http://localhost:2300/containers/{container_id}/start'
     status_code, data = await make_post_async_request(url, data={})
-    if status_code >= 400:
+    if status_code == 204:
         return RedirectResponse('/')
     response = {'request': request, **data}
     return templates.TemplateResponse('error_page.html', response)
@@ -51,7 +51,7 @@ async def stop_container(request: Request, container_id: str):
     """Роут для остановки контейнера"""
     url = f'http://localhost:2300/containers/{container_id}/stop'
     status_code, data = await make_post_async_request(url, data={})
-    if status_code >= 400:
+    if status_code == 204:
         return RedirectResponse('/')
     response = {'request': request, **data}
     return templates.TemplateResponse('error_page.html', response)
