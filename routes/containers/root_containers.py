@@ -1,3 +1,5 @@
+from typing import Callable
+
 from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -28,66 +30,42 @@ async def inspect_container(container_id: str):
 async def restart_container(request: Request, container_id: str):
     """Роут для перезапуска контейнера"""
     url = f'http://localhost:2300/containers/{container_id}/restart'
-    status_code, data = await make_post_async_request(url, data={})
-    if status_code == 204:
-        return RedirectResponse('/')
-    response = {'request': request, **data}
-    return templates.TemplateResponse('error_page.html', response)
+    return await make_request(url, request)
 
 
 @router.get('/start/{container_id}')
 async def start_container(request: Request, container_id: str):
     """Роут для запуска контейнера"""
     url = f'http://localhost:2300/containers/{container_id}/start'
-    status_code, data = await make_post_async_request(url, data={})
-    if status_code == 204:
-        return RedirectResponse('/')
-    response = {'request': request, **data}
-    return templates.TemplateResponse('error_page.html', response)
+    return await make_request(url, request)
 
 
 @router.get('/stop/{container_id}')
 async def stop_container(request: Request, container_id: str):
     """Роут для остановки контейнера"""
     url = f'http://localhost:2300/containers/{container_id}/stop'
-    status_code, data = await make_post_async_request(url, data={})
-    if status_code == 204:
-        return RedirectResponse('/')
-    response = {'request': request, **data}
-    return templates.TemplateResponse('error_page.html', response)
+    return await make_request(url, request)
 
 
 @router.get('/pause/{container_id}')
 async def pause_container(request: Request, container_id: str):
     """Роут для приостановки работы контейнера"""
     url = f'http://localhost:2300/containers/{container_id}/pause'
-    status_code, data = await make_post_async_request(url, data={})
-    if status_code == 204:
-        return RedirectResponse('/')
-    response = {'request': request, **data}
-    return templates.TemplateResponse('error_page.html', response)
+    return await make_request(url, request)
 
 
 @router.get('/unpause/{container_id}')
 async def unpause_container(request: Request, container_id: str):
     """Роут для продолжения работы контейнера"""
     url = f'http://localhost:2300/containers/{container_id}/unpause'
-    status_code, data = await make_post_async_request(url, data={})
-    if status_code == 204:
-        return RedirectResponse('/')
-    response = {'request': request, **data}
-    return templates.TemplateResponse('error_page.html', response)
+    return await make_request(url, request)
 
 
 @router.get('/delete/{container_id}')
 async def delete_container(request: Request, container_id: str):
     """Роут для удаления контейнера"""
     url = f'http://localhost:2300/containers/{container_id}'
-    status_code, data = await make_delete_async_request(url, data={})
-    if status_code == 204:
-        return RedirectResponse('/')
-    response = {'request': request, **data}
-    return templates.TemplateResponse('error_page.html', response)
+    return await make_request(url, request, make_delete_async_request)
 
 
 
@@ -103,3 +81,15 @@ async def logs_view(request: Request, container_id: str, selected_range: int = 1
     if 'message' in data:
         return templates.TemplateResponse('error_page.html', data)
     return templates.TemplateResponse('logs.html', data)
+
+
+async def make_request(url: str,
+                       request: Request,
+                       request_func: Callable = make_post_async_request,
+                       success_code: int = 204):
+    status_code, data = await request_func(url, data={})
+    if status_code == success_code:
+        return RedirectResponse('/')
+    response = {'request': request, **data}
+    return templates.TemplateResponse('error_page.html', response)
+
